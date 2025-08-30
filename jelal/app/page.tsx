@@ -1,9 +1,16 @@
-import {Button} from '@/components/ui/button';
-
+import HeroSection from "@/components/home/hero-section";
+import DemoSection from "@/components/home/demo-section";
+import HowItWorksSection from "@/components/common/how-it-works-section";
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p=20 font-[family-name:var(--font-geist-sans)]">
-      <Button>Shadcn Button</Button>
-    </div>
+    <div className="relative w-full">
+      <div className="flex flex-col">
+        <HeroSection/>
+        <DemoSection/>
+        <HowItWorksSection/>
+      </div>
+      {/* <PricingSection/> */}
+      {/* <CTASection/> */}
+    </div> 
   );
 }
