@@ -5,7 +5,7 @@ import NavLink from '@/components/common/navlink';
 
 export default function Header() {
     const isLoggedIn = false;
-    return <nav className="container flex items-center justify-between py-4 lg:px-8 px-2 mx-auto">
+    return <nav className="container flex items-center justify-between py-4 px-20 lg:px-40 mx-auto">
         <div className="flex lg:flex-1">
             <NavLink href="/" className="flex items-center gap-1 lg:gap-2 shrink-0">
                 <NotebookTabs className="w-5 h-5 lg:w-8 lg:h-8 text-gray-900 hover:rotate-12 transform transition duration-200 ease-in-out"/>

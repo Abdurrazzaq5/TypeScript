@@ -3,6 +3,7 @@ import { ReactNode} from "react";
 import { Upload } from "lucide-react";
 import { ScanText } from "lucide-react";
 import { FileText } from "lucide-react";
+import { MoveRight } from "lucide-react";
 
 type Step = {
     icon: ReactNode;
@@ -51,7 +52,17 @@ export default function HowItWorksSection() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto relative">
                         {steps.map((step, idx) => (
-                            <StepItem key={idx} {...step}/>
+                            <div className="relative flex items-stretch" key={idx} >
+                                <StepItem {...step}/>
+                                {idx < steps.length -1 && (
+                                    <div className="hidden md:block absolute top-1/2 -right-4 transform -translatey-1/2 z-10">
+                                        <MoveRight 
+                                        size={32} 
+                                        strokeWidth={1} 
+                                        className="text-blue-400"></MoveRight>
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </div>   
             </div>
