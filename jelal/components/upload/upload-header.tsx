@@ -7,7 +7,7 @@ export default function UploadHeader() {
                     <div className="relative p-[1px] overflow-hidden rounded-full bg-linear-to-r from-blue-200 via-blue-500 to-blue-800 animate-gradient-x group">
                         <Badge variant={"secondary"} className="relative px-6 pz-2 text-base font-medium bg-white rounded-full group-hover:bg-gray-50 transition-colors">
                             <Sparkles className="h-6 w-6 mr-2 text-blue-600 animate-pulse"/>
-                            <span className="text-base">AI-Powered Content Creation</span>
+                            <span className="text-base">AI-Powered Normalization</span>
                         </Badge>
                     </div>
                     <div className="capitalize text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

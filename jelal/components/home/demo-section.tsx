@@ -24,9 +24,9 @@ export default function DemoSection() {
                 <h3 className="font-bold text-3xl max-w-2xl mx-auto px-4 sm:px-6">
                     Watch how Jelal transforms{' '} 
                     <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-                        this Next.js course PDF 
+                        this Q2 Client Report 
                     </span>{' '}
-                    into an easy-to-read summary!
+                    into a normalized summary!
                 </h3>              
             </div>
 

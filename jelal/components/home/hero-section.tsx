@@ -19,7 +19,7 @@ export default function HeroSection() {
                     </Badge>
                     </div>
                 </div>
-                <h1 className="font-bold py-6 text-center">Turn Any PDF into a <br />
+                <h1 className="font-bold py-6 text-center">Turn a Confusing Corporate Paper into a<br />
                     <span className="relative inine-block">
                         <span className="relative z-10 px-2">
                             Clear    
@@ -30,7 +30,7 @@ export default function HeroSection() {
                     </span>{' '}
                     Summary in Seconds</h1>
                 <h2 className="text-lg sm:text-xl lg:text-2xl text-center px-4 lg:px--0 lg:max-w-4xl 
-                text-gray-500">Instantly distill a document into an easy-to-digest summary reel.</h2>
+                text-gray-500">Instantly distill a document into an easy-to-digest summary with synonym normalization.</h2>
                 <div>
                     <Button className="bg-blue-600 hover:bg-blue-700 text-white mt-6 text-base sm:text-lg lg:text-xl 
                     rounded-full px-8 sm:px-10 lg:px-12 py-6 sm:py-7 lg:py-8 lg:mt-16">

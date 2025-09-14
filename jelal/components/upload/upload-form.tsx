@@ -1,93 +1,87 @@
 'use client';
 
-import { useUploadThing } from "@/utils/uploadthing";
 import UploadFormInput from "./upload-form-input";
-import { z } from "zod";
 import { toast } from "sonner";
-import { generatePDFSummary } from "@/actions/upload-actions";
+
 import { useRef } from "react";
 import { useState } from "react";
 
-const schema = z.object({
-    file: z.instanceof(File, {message: 'Invalid file'}).refine((file)=>file.size <=20*1024*1024, {
-        message: 'FIle size must be less than 20MB',
-    })
-    .refine((file)=> file.type.startsWith('application/pdf'), 'File size must be a PDF')
-});
-
 export default function UploadForm() {
     const formRef = useRef<HTMLFormElement>(null);
-    const [isLoading, setIsLoading ] = useState(false);
-
-    const { startUpload, routeConfig } = useUploadThing('pdfUploader', {
-        onClientUploadComplete: () => {
-            console.log('upload success!');
-        },
-        onUploadError: (err) => {
-            console.log('error occured while uploading.', err);
-            toast.error('Error occurred while uploading', {
-                description: err.message,
-            })
-        },
-        onUploadBegin: (file) => {
-            console.log('Upload has begun for', file);
-        },
-    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [summary, setSummary] = useState<string>("");
     
-    const  handleSubmit = async(e: React.FormEvent <HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        try{
+        try {
             setIsLoading(true);
+            setSummary("");
+            
             const formData = new FormData(e.currentTarget);
-                    const file = formData.get('file') as File; 
+            const file = formData.get('file') as File; 
 
-                    const validatedFields = schema.safeParse({ file });
-                    if (!validatedFields.success) {
-                        const firstIssue = validatedFields.error.issues?.[0];
-                        toast.error(
-                            'Something went wrong.', {
-                                description: firstIssue?.message ?? 'Invalid File',
-                            }
-                        )
-                        setIsLoading(false);
-                        return;
-                    }
+            // Basic client-side validation
+            if (!file || file.type !== "application/pdf") {
+                toast.error('Validation failed', {
+                    description: 'Only PDF files are accepted',
+                });
+                setIsLoading(false);
+                return;
+            }
 
-                    toast("The document is being uploaded.")
-                    // Kick off upload
-                    void startUpload([file]);
+            if (file.size > 20 * 1024 * 1024) {
+                toast.error('Validation failed', {
+                    description: 'File size must be less than 20MB',
+                });
+                setIsLoading(false);
+                return;
+            }
 
-                const resp = await startUpload([file]);
-                if (!resp) {
-                    toast(
-                        "Something went wrong. Please use a different file."
-                    );
-                    return;
-                }
+            // Call the API endpoint
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
 
-                toast("Hang tight! Our AI is reading through your document.");
+            let result;
+            try {
+                result = await response.json();
+            } catch (jsonError) {
+                throw new Error('Server returned invalid response');
+            }
 
-                const result = await generatePDFSummary(resp);
+            if (!response.ok) {
+                throw new Error(result.error || 'Upload failed');
+            }
 
-                const {data=null, message=null} = result || {};
-                if (data) {
-                    toast("Hang tight! We are saving your summary!");
-                    formRef.current?.reset();
-                    if (data.summary) {
-                        
-                    }
-                }            
-        } catch(error) {
-            setIsLoading(false);
-            console.log("Error occured", error);
+            setSummary(result.summary);
+            toast.success('Document processed successfully!');
             formRef.current?.reset();
+            
+        } catch(error) {
+            console.error("Error occurred", error);
+            toast.error('Processing failed', {
+                description: error instanceof Error ? error.message : 'Something went wrong',
+            });
+        } finally {
+            setIsLoading(false);
         }
-
     }
+
     return (
         <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
             <UploadFormInput isLoading={isLoading} ref={formRef} onSubmit={handleSubmit}/>
+            
+            {summary && (
+                <div className="mt-8 p-6 bg-gray-50 rounded-lg border">
+                    <h3 className="text-lg font-semibold mb-4">Normalization Summary</h3>
+                    <div 
+                        className="prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: summary.replace(/\n/g, '<br>') }}
+                    />
+                </div>
+            )}
         </div>
     )
 }
